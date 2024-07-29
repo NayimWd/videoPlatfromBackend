@@ -25,12 +25,12 @@ const userSchema = new Schema(
       trim: true,
       index: true,
     },
-    avtar: {
-      type: string, // cloudinary url
+    avatar: {
+      type: String, // cloudinary url
       required: true,
     },
     coverImage: {
-      type: string,
+      type: String,
     },
     watchHistory: [
       {
@@ -52,7 +52,7 @@ const userSchema = new Schema(
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
-  this.password = bcrype.hash(this.password, 10);
+  this.password = await bcrype.hash(this.password, 10);
   next();
 });
 
