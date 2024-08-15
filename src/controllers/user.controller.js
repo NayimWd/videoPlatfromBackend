@@ -111,7 +111,6 @@ const loginUser = asyncHandler(async (req, res) => {
     user._id
   );
 
-
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
