@@ -238,7 +238,9 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     throw new ApiError(404, "User not exist");
   }
 
-  return res.status(200).json(200, user, "current user fetched successfully");
+  return res.status(200).json(
+    new ApiResponse(200, user, "current user fetched successfully")
+  );
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
@@ -403,7 +405,7 @@ const getWatchHistory = asyncHandler(async (req, res) => {
   const user = await User.aggregate([
     {
       $match: {
-        _id: new mongoose.Types.ObjectId.cacheHexString(req.user?._id),
+        _id: new mongoose.Types.ObjectId(req.user?._id),
       },
     },
     {
@@ -442,12 +444,18 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     },
   ]);
 
+  // console.log(user[0]?.watchHistory?.length)
+  // if(user[0]?.watchHistory?.length === 0){
+  //   throw new ApiError(404, "No watch history exist yet")
+  // }
+
   return res
   .status(200)
   .json(
     new ApiResponse(
       200,
       user[0].watchHistory,
+      user[0].watchHistory?.length === 0 ? "No watch history exist yet" :
       "watch history found successfully"
     )
   )
